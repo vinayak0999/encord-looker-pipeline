@@ -1,0 +1,14 @@
+# Secrets
+*.json
+*.ed25519
+encord_key*
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
