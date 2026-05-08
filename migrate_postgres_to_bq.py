@@ -17,11 +17,11 @@ import psycopg2
 from google.cloud import bigquery
 
 # ─── Config ───
-DATABASE_URL = os.environ.get(
-    "DATABASE_URL",
-    "postgresql://postgres:CsQiBZmLZUfPfcYOfFJTGERNDiTlXTYF@switchback.proxy.rlwy.net:33972/railway"
-)
-GCP_PROJECT = os.environ.get("GCP_PROJECT", "autonex-488609")
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if not DATABASE_URL:
+    raise ValueError("Set DATABASE_URL env var (PostgreSQL connection string)")
+
+GCP_PROJECT = os.environ.get("GCP_PROJECT", "encord-accelerate")
 BQ_DATASET  = os.environ.get("BQ_DATASET", "encord_metrics")
 STAGING_TABLE = f"{GCP_PROJECT}.{BQ_DATASET}.daily_metrics_staging"
 

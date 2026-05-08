@@ -114,7 +114,7 @@ def main():
         project_hashes = PROJECT_HASHES
         print(f"  Tracking {len(project_hashes)} configured projects")
     else:
-        projects_list = user_client.get_projects()
+        projects_list = user_client.list_projects()
         project_hashes = [p["project"]["project_hash"] for p in projects_list]
         print(f"  Found {len(project_hashes)} projects")
 

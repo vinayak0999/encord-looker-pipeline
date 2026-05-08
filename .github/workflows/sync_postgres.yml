@@ -1,0 +1,31 @@
+name: Sync PostgreSQL → BigQuery
+
+on:
+  schedule:
+    - cron: "30 14 * * *"    # daily at 8:00 PM IST (14:30 UTC) — after admin saves
+  workflow_dispatch:          # manual trigger anytime
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install psycopg2-binary google-cloud-bigquery
+
+      - name: Write GCP key
+        run: printf '%s' "$GCP_SA_KEY" > /tmp/gcp-key.json
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Sync data
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-key.json
+          GCP_PROJECT: encord-accelerate
+          BQ_DATASET: encord_metrics
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python migrate_postgres_to_bq.py
